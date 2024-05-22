@@ -1,0 +1,23 @@
+{
+  "name": "poc-custom-linter",
+  "version": "1.0.0",
+  "description": "## A POC to understand how linter work and create a custom one",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "ts-node main.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/henriqueidt/poc-custom-linter.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/henriqueidt/poc-custom-linter/issues"
+  },
+  "homepage": "https://github.com/henriqueidt/poc-custom-linter#readme",
+  "devDependencies": {
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.5"
+  }
+}
