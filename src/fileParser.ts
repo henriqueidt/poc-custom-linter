@@ -3,7 +3,7 @@ import { parse, Node } from "acorn";
 import * as espree from "espree";
 import { traverse } from "estraverse";
 import { red, yellow, gray } from "chalk";
-import { defaultRules, RuleType, RuleName } from "./rules";
+import { defaultRules, RuleType, RuleName, onLeaveFunction } from "./rules";
 
 interface Result {
   message: string;
@@ -13,15 +13,16 @@ interface Result {
   rule: RuleName;
 }
 
-export const parseFile = (data: string) => {
+export const parseFile = (data: string, filePath: string) => {
   let token;
   let results: Result[] = [];
+  // const ast = parse(data, { ecmaVersion: "latest", locations: true });
   const ast = parse(data, { ecmaVersion: "latest", locations: true });
-  // const ast = espree.parse(data, { ecmaVersion: "latest" });
   traverse(ast, {
-    enter: function (node: Node) {
+    enter: function (node: Node, parent?: Node) {
+      // console.log(node);
       defaultRules.forEach((rule) => {
-        if (rule.condition(node)) {
+        if (rule.condition(node, parent)) {
           results.push({
             line: node.loc?.start.line,
             // Adding 1 to column as it is 0-based and eslint is 1-based
@@ -33,9 +34,15 @@ export const parseFile = (data: string) => {
         }
       });
     },
+    leave: function (node: Node, parent?: Node) {
+      if (node.type === "FunctionDeclaration") {
+        onLeaveFunction();
+      }
+    },
   });
 
   if (results.length > 0) {
+    console.log(`\n${filePath}`);
     results.forEach((result) => {
       if (result.type === "error") {
         console.log(
