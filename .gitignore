@@ -1,3 +1,4 @@
-/node_modules
-
-src/*.js
+out
+node_modules
+client/server
+.vscode-test
